@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>夏の子育て快適ナビ - 2025年人気アイテムガイド</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Soft Summer Day -->
+    <!-- Application Structure Plan: A tab-based SPA structure is chosen for optimal user navigation. Users can immediately access key categories (Heat, UV/Bugs, Water Play, Care) via a sticky top navigation bar. This is more user-friendly than a long scroll, allowing users to jump to the information most relevant to their immediate needs. Within each category, sub-tabs and interactive elements like charts and accordions break down complex information into digestible chunks. This task-oriented design (e.g., finding "outdoor" vs. "indoor" solutions) directly addresses the practical problems parents face, making the application a highly usable tool rather than a static report. -->
+    <!-- Visualization & Content Choices: 
+        - Goal: Compare (Heat): Report's neck cooler popularity data -> A Chart.js Doughnut chart is used to visually represent the popularity distribution, which is more engaging than text. Goal: Organize -> An HTML table presents detailed product comparisons clearly.
+        - Goal: Inform (UV/Bugs): Report's sunscreen/bug spray product info -> A card-based layout using HTML/Tailwind presents key product features (price, ingredients, target age) in a scannable format. Goal: Compare -> A simple two-column HTML/Flexbox layout is used to clearly differentiate bug repellent ingredients (DEET vs. Icaridin), using icons for quick recognition.
+        - Goal: Guide (Water Play): Report's pool selection criteria -> A checklist-style guide using HTML/CSS helps users make informed decisions.
+        - Goal: Organize (Care Tips): Report's maintenance instructions -> An accordion UI built with HTML/JS organizes dense information neatly, preventing user overload.
+        - Library/Method: Chart.js for the doughnut chart, Tailwind CSS for all layouts/styling, and vanilla JavaScript for all interactive logic (tabs, accordions). -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'M PLUS Rounded 1c', sans-serif; background-color: #FFFDF8; }
+        .tab-button.active { background-color: #F8B400; color: #4A4A4A; }
+        .tab-button { transition: all 0.3s ease; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .sub-tab-button.active { border-color: #F8B400; background-color: #FFFBEB; }
+        .sub-content { display: none; }
+        .sub-content.active { display: block; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .chart-container { position: relative; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; height: 320px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .rakuten-affiliate-placeholder {
+            border: 2px dashed #FFD700; /* Gold color for Rakuten */
+            background-color: #FFFBEB; /* Light background */
+            padding: 1rem;
+            text-align: center;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            color: #D97706; /* Darker gold/orange text */
+            max-width: 768px; /* Max width for banners */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .rakuten-affiliate-placeholder img {
+            margin-bottom: 0.5rem; /* Space between multiple banners */
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <header class="bg-[#FFFAE7]/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4 py-3">
+            <h1 class="text-2xl md:text-3xl font-bold text-center text-[#D97706]">夏の子育て快適ナビ ☀️</h1>
+            <p class="text-center text-sm text-gray-600 mt-1">2025年版 | 人気アイテムで猛暑を乗り切ろう！</p>
+        </div>
+        <nav id="main-nav" class="flex justify-around bg-white border-t border-b border-gray-200">
+            <button data-target="heat" class="tab-button active flex-1 p-3 text-sm md:text-base font-semibold text-gray-600 hover:bg-amber-100">🌡️ 暑さ対策</button>
+            <button data-target="uv" class="tab-button flex-1 p-3 text-sm md:text-base font-semibold text-gray-600 hover:bg-amber-100">🐞 紫外線・虫対策</button>
+            <button data-target="water" class="tab-button flex-1 p-3 text-sm md:text-base font-semibold text-gray-600 hover:bg-amber-100">💧 水遊び</button>
+            <button data-target="care" class="tab-button flex-1 p-3 text-sm md:text-base font-semibold text-gray-600 hover:bg-amber-100">🧼 お手入れ＆他</button>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-6">
+        
+        <section id="heat" class="content-section active">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-amber-600">暑さ対策グッズ</h2>
+                <p class="mt-2 text-gray-600">夏の厳しい暑さから赤ちゃんを守るための必須アイテムをご紹介。「お出かけ」と「おうち」のシーン別に、人気の冷却グッズを比較・検討できます。</p>
+            </div>
+            <div class="flex justify-center border-b-2 border-gray-200 mb-6">
+                <button data-subtarget="heat-outdoor" class="sub-tab-button active font-semibold py-2 px-6 border-b-2 border-transparent">お出かけ</button>
+                <button data-subtarget="heat-indoor" class="sub-tab-button font-semibold py-2 px-6 border-b-2 border-transparent">おうち</button>
+            </div>
+
+            <div id="heat-outdoor" class="sub-content active">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <h3 class="font-bold text-lg mb-2">ベビーカー・抱っこひも用冷却シート</h3>
+                        <p class="text-sm mb-3">ファン付きシートが主流に。赤ちゃんの背中をサラサラに保ちます。特に30℃を超える日は、熱風化を防ぐために保冷剤との併用が推奨されます。</p>
+                        <div class="bg-amber-50 p-3 rounded-md">
+                            <p class="font-semibold text-amber-800">人気商品例：エアラブ4+</p>
+                            <p class="text-sm">ファンと保冷剤ポケットでW冷却。装着したままベビーカーを畳める利便性も高評価です。価格は11,800円～。</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <h3 class="font-bold text-lg mb-2">首元冷却アイテム人気度</h3>
+                        <p class="text-sm mb-3">手軽に涼をとれる首元アイテムの人気調査結果です。ネックリングが最も人気を集めています。</p>
+                        <div class="chart-container">
+                            <canvas id="neckCoolerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="rakuten-affiliate-placeholder">
+                    <p>ここに暑さ対策グッズの楽天アフィリエイトバナーを挿入してください</p>
+                    <p class="text-xs text-gray-500 mb-2">（複数のバナーを続けて貼り付けられます）</p>
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+1" alt="Rakuten Affiliate Banner Placeholder 1" class="mx-auto mt-2 rounded-md">
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+2" alt="Rakuten Affiliate Banner Placeholder 2" class="mx-auto mt-2 rounded-md">
+                </div>
+            </div>
+
+            <div id="heat-indoor" class="sub-content">
+                 <h3 class="font-bold text-lg mb-4 text-center">寝具・室内用冷却アイテム</h3>
+                 <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                         <h4 class="font-bold mb-2">ひんやり敷きパッド＆ブランケット</h4>
+                         <p class="text-sm mb-3">汗っかきの赤ちゃんが快適に眠れる必需品。接触冷感素材で寝つきをサポートします。洗濯のしやすさも選ぶポイント。</p>
+                         <div class="bg-amber-50 p-3 rounded-md">
+                            <p class="font-semibold text-amber-800">ユーザーの声</p>
+                            <p class="text-sm">「寝相が良くなった」「冷えすぎないのが良い」といった声が多数。通年で使う家庭も。</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                         <h4 class="font-bold mb-2">い草マット＆汗取りタオル</h4>
+                         <p class="text-sm">日本の伝統素材「い草」は、自然なひんやり感と吸湿性が魅力。汗をかきやすい背中には、こまめに取り替えられる汗取りタオルも便利です。</p>
+                    </div>
+                 </div>
+                 <div class="rakuten-affiliate-placeholder">
+                    <p>ここに室内用冷却アイテムの楽天アフィリエイトバナーを挿入してください</p>
+                    <p class="text-xs text-gray-500 mb-2">（複数のバナーを続けて貼り付けられます）</p>
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+1" alt="Rakuten Affiliate Banner Placeholder 1" class="mx-auto mt-2 rounded-md">
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+2" alt="Rakuten Affiliate Banner Placeholder 2" class="mx-auto mt-2 rounded-md">
+                </div>
+            </div>
+        </section>
+
+        <section id="uv" class="content-section">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-sky-600">紫外線・虫対策グッズ</h2>
+                <p class="mt-2 text-gray-600">デリケートな赤ちゃんの肌を夏の刺激から守るためのアイテム。肌に優しい製品選びが重要です。</p>
+            </div>
+            <div class="flex justify-center border-b-2 border-gray-200 mb-6">
+                <button data-subtarget="uv-sunscreen" class="sub-tab-button active font-semibold py-2 px-6 border-b-2 border-transparent">日焼け止め</button>
+                <button data-subtarget="uv-bug" class="sub-tab-button font-semibold py-2 px-6 border-b-2 border-transparent">虫除け</button>
+            </div>
+            
+            <div id="uv-sunscreen" class="sub-content active">
+                <h3 class="font-bold text-lg mb-4 text-center">ベビー用日焼け止めの選び方</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-6">
+                    <div class="bg-white p-3 rounded-lg shadow"><p class="font-semibold">低刺激</p><p class="text-xs">ノンケミカル処方</p></div>
+                    <div class="bg-white p-3 rounded-lg shadow"><p class="font-semibold">SPF/PA</p><p class="text-xs">日常はSPF20程度</p></div>
+                    <div class="bg-white p-3 rounded-lg shadow"><p class="font-semibold">テクスチャ</p><p class="text-xs">塗りやすいミルクタイプ</p></div>
+                    <div class="bg-white p-3 rounded-lg shadow"><p class="font-semibold">落としやすさ</p><p class="text-xs">せっけんで落ちる</p></div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4">
+                     <div class="border p-4 rounded-lg bg-white">
+                        <p class="font-bold">1位: アネッサ マイルドジェル</p>
+                        <p class="text-sm mt-1">高いUVカット率と低刺激性を両立。保湿効果も。2,500円前後。</p>
+                    </div>
+                    <div class="border p-4 rounded-lg bg-white">
+                        <p class="font-bold">2位: アロベビー UVミルク</p>
+                        <p class="text-sm mt-1">国産オーガニック。虫除け効果を兼ねるタイプも人気。2,500円前後。</p>
+                    </div>
+                    <div class="border p-4 rounded-lg bg-white">
+                        <p class="font-bold">3位: ピジョン UVベビーミルク</p>
+                        <p class="text-sm mt-1">高コスパで普段使いに最適。ポンプ式で手軽。500円台～。</p>
+                    </div>
+                </div>
+                <div class="rakuten-affiliate-placeholder">
+                    <p>ここにベビー用日焼け止めの楽天アフィリエイトバナーを挿入してください</p>
+                    <p class="text-xs text-gray-500 mb-2">（複数のバナーを続けて貼り付けられます）</p>
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+1" alt="Rakuten Affiliate Banner Placeholder 1" class="mx-auto mt-2 rounded-md">
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+2" alt="Rakuten Affiliate Banner Placeholder 2" class="mx-auto mt-2 rounded-md">
+                </div>
+            </div>
+
+            <div id="uv-bug" class="sub-content">
+                <h3 class="font-bold text-lg mb-4 text-center">虫除け成分、どっちを選ぶ？</h3>
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <h4 class="font-bold text-center text-sky-700">ディート</h4>
+                        <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                            <li>幅広い虫に効果あり</li>
+                            <li>6ヶ月未満の乳児には使用不可</li>
+                            <li>年齢で使用回数に制限あり</li>
+                        </ul>
+                    </div>
+                     <div class="bg-white p-4 rounded-lg shadow-md">
+                        <h4 class="font-bold text-center text-green-700">イカリジン / 天然成分</h4>
+                        <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                            <li>年齢制限なく使える</li>
+                            <li>肌に優しく、特有の匂いが少ない</li>
+                            <li>オーガニック製品も多数</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-center text-sm text-gray-600">物理的に防ぐ「虫除けネット」や「UVカット衣類」との併用が効果的です。</p>
+                <div class="rakuten-affiliate-placeholder">
+                    <p>ここに虫除けグッズの楽天アフィリエイトバナーを挿入してください</p>
+                    <p class="text-xs text-gray-500 mb-2">（複数のバナーを続けて貼り付けられます）</p>
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+1" alt="Rakuten Affiliate Banner Placeholder 1" class="mx-auto mt-2 rounded-md">
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+2" alt="Rakuten Affiliate Banner Placeholder 2" class="mx-auto mt-2 rounded-md">
+                </div>
+            </div>
+        </section>
+
+        <section id="water" class="content-section">
+             <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-blue-600">水遊びアイテム</h2>
+                <p class="mt-2 text-gray-600">おうち時間も夏らしく！安全に楽しく遊べる家庭用プールやおもちゃをご紹介します。</p>
+            </div>
+             <div class="flex justify-center border-b-2 border-gray-200 mb-6">
+                <button data-subtarget="water-pool" class="sub-tab-button active font-semibold py-2 px-6 border-b-2 border-transparent">おうちプール</button>
+                <button data-subtarget="water-toy" class="sub-tab-button font-semibold py-2 px-6 border-b-2 border-transparent">水遊びおもちゃ</button>
+            </div>
+
+            <div id="water-pool" class="sub-content active">
+                <h3 class="font-bold text-lg mb-4 text-center">家庭用プール選びのチェックリスト</h3>
+                <div class="max-w-md mx-auto bg-white p-4 rounded-lg shadow">
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> 安全性（底面クッション、浅さ）</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> 素材の耐久性（破れにくいPVC素材など）</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> サイズと設置場所（ベランダの柵の高さも確認）</li>
+                        <li class="flex items-center"><span class="text-blue-500 mr-2">✓</span> 片付けやすさ（排水栓の位置、空気抜きのしやすさ）</li>
+                    </ul>
+                </div>
+                 <p class="text-center text-xs text-gray-500 mt-2">空気入れ不要の折りたたみ式も人気です。</p>
+                 <div class="rakuten-affiliate-placeholder">
+                    <p>ここに家庭用プールの楽天アフィリエイトバナーを挿入してください</p>
+                    <p class="text-xs text-gray-500 mb-2">（複数のバナーを続けて貼り付けられます）</p>
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+1" alt="Rakuten Affiliate Banner Placeholder 1" class="mx-auto mt-2 rounded-md">
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+2" alt="Rakuten Affiliate Banner Placeholder 2" class="mx-auto mt-2 rounded-md">
+                </div>
+            </div>
+
+            <div id="water-toy" class="sub-content">
+                 <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                         <h4 class="font-bold mb-2">水鉄砲</h4>
+                         <p class="text-sm mb-3">シンプルな小型タイプから、キャラクターのタンク付き、パワフルな電動タイプまで様々。価格帯も数百円から数千円と幅広いです。</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                         <h4 class="font-bold mb-2">ボーネルンド アクアプレイ</h4>
+                         <p class="text-sm mb-3">水の流れを学びながら遊べる人気の知育玩具。ポンプや水門で運河の仕組みを体験できます。価格帯は11,550円～。</p>
+                    </div>
+                 </div>
+                 <div class="rakuten-affiliate-placeholder">
+                    <p>ここに水遊びおもちゃの楽天アフィリエイトバナーを挿入してください</p>
+                    <p class="text-xs text-gray-500 mb-2">（複数のバナーを続けて貼り付けられます）</p>
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+1" alt="Rakuten Affiliate Banner Placeholder 1" class="mx-auto mt-2 rounded-md">
+                    <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+2" alt="Rakuten Affiliate Banner Placeholder 2" class="mx-auto mt-2 rounded-md">
+                </div>
+            </div>
+        </section>
+
+        <section id="care" class="content-section">
+             <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-emerald-600">お手入れ＆その他</h2>
+                <p class="mt-2 text-gray-600">お気に入りのアイテムを長く衛生的に使うためのお手入れ方法と、あると便利なグッズをご紹介。</p>
+            </div>
+            <div id="accordion-container" class="max-w-2xl mx-auto space-y-2">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <button class="accordion-button w-full text-left p-4 font-semibold flex justify-between items-center">
+                        <span>冷却シート・寝具のお手入れ</span>
+                        <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content px-4 pb-4 text-sm">
+                        <p><strong>ファン付きシート:</strong> ファンを外し、中性洗剤で優しく手洗い。日陰で平干しします。洗濯機・乾燥機はNG。<br><strong>ひんやり敷きパッド:</strong> 洗濯ネットに入れ、多めの水で洗濯。乾燥機は避け、風通しの良い日陰で乾燥させます。</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <button class="accordion-button w-full text-left p-4 font-semibold flex justify-between items-center">
+                        <span>UV・虫対策アイテムの保管</span>
+                         <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content px-4 pb-4 text-sm">
+                        <p><strong>日焼け止め:</strong> 開封後は1年以内に使い切るのが目安。高温・多湿・直射日光を避け、冷暗所で保管。<br><strong>UVカット衣類:</strong> 漂白剤や強い洗剤を避け、洗濯表示に従って洗濯。湿気を避け、防虫剤と共に保管します。</p>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <button class="accordion-button w-full text-left p-4 font-semibold flex justify-between items-center">
+                        <span>水遊びアイテムの片付け</span>
+                         <span class="transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content px-4 pb-4 text-sm">
+                        <p><strong>家庭用プール:</strong> 使用後は中性洗剤で洗い、ぬめりを取る。完全に乾燥させてから畳むのがカビ防止のコツ。ベビーパウダーを振るとべたつきを防げます。<br><strong>水鉄砲:</strong> 中の水を完全に抜き、しっかり乾燥させます。お湯ですすぐと殺菌効果も。</p>
+                    </div>
+                </div>
+            </div>
+             <div class="mt-8">
+                 <h3 class="font-bold text-lg mb-4 text-center">その他あると便利なアイテム</h3>
+                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-center text-sm">
+                     <div class="bg-white p-2 rounded-md shadow-sm">軽量サンダル</div>
+                     <div class="bg-white p-2 rounded-md shadow-sm">防水ケース</div>
+                     <div class="bg-white p-2 rounded-md shadow-sm">帽子クリップ</div>
+                     <div class="bg-white p-2 rounded-md shadow-sm">車用サンシェード</div>
+                     <div class="bg-white p-2 rounded-md shadow-sm">ペットボトルホルダー</div>
+                     <div class="bg-white p-2 rounded-md shadow-sm">氷のう</div>
+                 </div>
+             </div>
+             <div class="rakuten-affiliate-placeholder">
+                <p>ここにその他の便利アイテムの楽天アフィリエイトバナーを挿入してください</p>
+                <p class="text-xs text-gray-500 mb-2">（複数のバナーを続けて貼り付けられます）</p>
+                <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+1" alt="Rakuten Affiliate Banner Placeholder 1" class="mx-auto mt-2 rounded-md">
+                <img src="https://placehold.co/468x60/FFD700/FFFFFF?text=Rakuten+Banner+2" alt="Rakuten Affiliate Banner Placeholder 2" class="mx-auto mt-2 rounded-md">
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 mt-8 py-4">
+        <div class="container mx-auto px-4 text-center text-xs text-gray-500">
+            <p>このページは「夏の子育て道具人気商品リサーチ」レポートを元に作成されたインタラクティブガイドです。</p>
+            <p>&copy; 2025 夏の子育て快適ナビ</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainNav = document.getElementById('main-nav');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            mainNav.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const targetId = e.target.dataset.target;
+
+                    mainNav.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        }
+                    });
+                }
+            });
+
+            const subTabContainers = document.querySelectorAll('.content-section');
+            subTabContainers.forEach(container => {
+                const subTabs = container.querySelectorAll('.sub-tab-button');
+                const subContents = container.querySelectorAll('.sub-content');
+
+                subTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const subTargetId = tab.dataset.subtarget;
+                        subTabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+
+                        subContents.forEach(content => {
+                            content.classList.remove('active');
+                            if (content.id === subTargetId) {
+                                content.classList.add('active');
+                            }
+                        });
+                    });
+                });
+            });
+
+            const accordionContainer = document.getElementById('accordion-container');
+            if (accordionContainer) {
+                accordionContainer.addEventListener('click', (e) => {
+                    const button = e.target.closest('.accordion-button');
+                    if (button) {
+                        const content = button.nextElementSibling;
+                        const icon = button.querySelector('span:last-child');
+                        
+                        button.parentElement.classList.toggle('open');
+                        icon.classList.toggle('rotate-180');
+
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    }
+                });
+            }
+
+
+            const ctx = document.getElementById('neckCoolerChart');
+            if(ctx) {
+                const neckCoolerData = {
+                    labels: ['ネックリング', '冷感タオル・スカーフ', '首掛け扇風機', 'ネッククーラー'],
+                    datasets: [{
+                        label: '人気度',
+                        data: [39.0, 28.1, 9.7, 4.7],
+                        backgroundColor: [
+                            '#F9A826',
+                            '#FDD835',
+                            '#FFEE58',
+                            '#FFF59D',
+                        ],
+                        borderColor: '#FFFDF8',
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }]
+                };
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: neckCoolerData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    font: {
+                                        family: "'M PLUS Rounded 1c', sans-serif"
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + '%';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
